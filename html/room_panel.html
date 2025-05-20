@@ -1,0 +1,309 @@
+
+<!-- FRONTEND PARA SIMULAR HABITACION CON PULSADOR -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>NurseCare</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        header img {
+            width: 60px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 10px 0 0 0;
+            font-size: 36px;
+        }
+
+        .habitacion-info {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 30px;
+            color: #34495e;
+        }
+
+        p.subtitulo {
+            margin-top: 5px;
+            font-size: 18px;
+            color: #ecf0f1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .info-input {
+            margin: 20px 0;
+            font-size: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info-input label {
+            width: 120px;
+            text-align: right;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .info-input input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 120px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 15px 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #llamada-btn {
+            background-color: #e74c3c;
+        }
+
+        #presencia-btn {
+            background-color: #27ae60;
+        }
+
+        .status {
+            margin-top: 30px;
+        }
+
+        .status p {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #lampara {
+            width: 100px;
+            margin-top: 10px;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .back-button {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+
+        .notificacion {
+            position: fixed;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            animation: slideIn 0.5s ease-in-out;
+            z-index: 1000;
+            margin-bottom: 10px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .notificacion.exito {
+            background-color: #27ae60;
+            box-shadow: 0 2px 5px rgba(39, 174, 96, 0.3);
+        }
+
+        .notificacion.error {
+            background-color: #e74c3c;
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.3);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NurseCare</h1>
+        <p class="subtitulo">Simulador de interacción paciente-enfermero</p>
+    </header>
+
+    <input type="hidden" id="habitacion" value="{{ room }}">
+    <input type="hidden" id="cama" value="{{ bed }}">
+
+    <p class="habitacion-info">Habitación {{ room }} - Cama {{ bed }}</p>
+
+    <div class="container">
+        <button id="llamada-btn" onclick="solicitarEnfermero()">
+            Solicitar Enfermero
+        </button>
+        
+        <button id="presencia-btn" onclick="enfermeroPresente()">
+            Enfermero Presente
+        </button>
+        
+        <div class="status">
+            <p>Estado de la lámpara:</p>
+            <img id="lampara" src="/static/pic_bulboff.gif" alt="Lámpara">
+            <p id="estado-lampara">Lámpara: Apagada</p>
+        </div>
+    </div>
+
+    <button class="back-button" onclick="window.location.href='/panel'">
+        Volver al Panel
+    </button>
+
+    <footer>
+        &copy; 2025 NurseCare. Oliver Garcia González.
+    </footer>
+
+    <script>
+        let checkStatus;
+
+        function mostrarNotificacion(mensaje, tipo) {
+            const notificacionesExistentes = document.querySelectorAll('.notificacion');
+            notificacionesExistentes.forEach(n => n.remove());
+
+            const notificacion = document.createElement('div');
+            notificacion.className = `notificacion ${tipo}`;
+            notificacion.textContent = mensaje;
+            
+            const offset = notificacionesExistentes.length * 70;
+            notificacion.style.top = `${20 + offset}px`;
+            
+            document.body.appendChild(notificacion);
+
+            setTimeout(() => {
+                notificacion.remove();
+            }, 3000);
+        }
+
+        function solicitarEnfermero() {
+            const habitacion = document.getElementById('habitacion').value;
+            const cama = document.getElementById('cama').value;
+            
+            fetch(`/llamada/${habitacion}/${cama}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al solicitar enfermero');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    mostrarNotificacion('Solicitud enviada correctamente', 'exito');
+                    checkStatus = setInterval(verificarEstadoLampara, 2000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarNotificacion('Error al solicitar enfermero', 'error');
+                });
+        }
+
+        function verificarEstadoLampara() {
+            const habitacion = document.getElementById('habitacion').value;
+            const cama = document.getElementById('cama').value;
+            
+            fetch(`/verificarestado/${habitacion}/${cama}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        
+                        // Si hay un error, mostrar la notificación
+                        mostrarNotificacion(data.message, 'error');
+                        clearInterval(checkStatus);
+                        return;
+                    }
+                    
+                    if (data.lamp_state === 'on') {
+                        document.getElementById('lampara').src = "/static/pic_bulbon.gif";
+                        document.getElementById('estado-lampara').textContent = "Lámpara: Encendida";
+                        mostrarNotificacion('Lámpara encendida correctamente', 'exito');
+                        clearInterval(checkStatus);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarNotificacion('Error al verificar estado', 'error');
+                });
+        }
+
+        function enfermeroPresente() {
+            const habitacion = document.getElementById('habitacion').value;
+            const cama = document.getElementById('cama').value;
+            
+            fetch(`/presencia/${habitacion}/${cama}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        mostrarNotificacion(data.message, 'error');
+                        return;
+                    }
+                    
+                    document.getElementById('lampara').src = "/static/pic_bulboff.gif";
+                    document.getElementById('estado-lampara').textContent = "Lámpara: Apagada";
+                    mostrarNotificacion('Presencia registrada correctamente', 'exito');
+                    
+                    if (checkStatus) {
+                        clearInterval(checkStatus);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    mostrarNotificacion('Error al registrar presencia', 'error');
+                });
+        }
+    </script>
+</body>
+</html>

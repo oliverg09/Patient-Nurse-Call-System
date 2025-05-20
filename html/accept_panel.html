@@ -1,0 +1,123 @@
+
+<!-- FRONTEND PARA MOSTRAR MENSAJE DE ACEPTACIÓN -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>NurseCare - Aceptar Llamada</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            margin: 10px 0 0 0;
+            font-size: 36px;
+        }
+
+        p.subtitulo {
+            margin-top: 5px;
+            font-size: 18px;
+            color: #ecf0f1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .status-message {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .error {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .back-button {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .room-info {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>NurseCare</h1>
+        <p class="subtitulo">Aceptar Llamada</p>
+    </header>
+
+    <div class="container">
+        <div class="room-info">
+            Habitación {{ room }} - Cama {{ bed }}
+        </div>
+        
+        <!-- Comprueba el mensaje y muestra el que corresponde, tanto error como exito -->
+        <div id="statusMessage" class="status-message {% if error %}error{% else %}success{% endif %}">
+            {{ message }}
+        </div>
+
+        <button class="back-button" onclick="window.close()">
+            Cerrar
+        </button>
+    </div>
+
+    <footer>
+        &copy; 2025 NurseCare. Oliver Garcia González.
+    </footer>
+
+</body>
+</html>

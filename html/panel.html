@@ -1,0 +1,383 @@
+
+<!-- FRONTEND PARA PANEL PRINCIPAL -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .main-container {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .panel-title {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+            width: 100%;
+        }
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+        .action-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+        .action-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .action-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 80%;
+            text-align: center;
+        }
+        
+        .error-message p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        footer {
+            margin-top: auto;
+            font-size: 14px;
+            color: #999;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+        }
+        .logout-button {
+            background-color: #ff4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .logout-button:hover {
+            background-color: #cc0000;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .email-button {
+            background-color: #95a5a6;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .email-button:hover {
+            background-color: #7f8c8d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .email-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+       .email-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .email-modal h3 {
+            color: #2c3e50;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 1.4em;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-buttons .confirm {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .modal-buttons .confirm:hover {
+            background-color: #2980b9;
+        }
+
+        .modal-buttons .cancel {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .modal-buttons .cancel:hover {
+            background-color: #7f8c8d;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="header">
+        <h1>Panel de Control Hospitalario</h1>
+    </div>
+
+    <button id="emailBtn" class="email-button" style="display: none;">Historico de llamadas</button>
+
+    <div id="emailModal" class="email-modal">
+        <h3>Ingrese el correo electrónico</h3>
+        <input type="email" id="emailInput" class="email-input" placeholder="ejemplo@correo.com">
+        <div class="modal-buttons">
+            <button class="cancel" onclick="closeEmailModal()">Cancelar</button>
+            <button class="confirm" onclick="submitEmail()">Confirmar</button>
+        </div>
+    </div>
+
+    <div class="buttons-container">
+        <button class="action-button" data-access="all" onclick="handleButtonClick('simulate')">
+            Simular Asistencia
+        </button>
+        <button class="action-button" onclick="handleButtonClick('employees')">
+            CRUD Empleados
+        </button>
+        <button class="action-button" onclick="handleButtonClick('attendance')">
+            Asistencia 24 Horas
+        </button>
+        <button class="action-button" onclick="handleButtonClick('create_rooms')">
+            Crear Habitaciones
+        </button>
+        <button class="action-button" onclick="handleButtonClick('create_beds')">
+            Crear Camas
+        </button>
+    </div>
+
+    <button id="logoutBtn" onclick="desenroll()" class="logout-button">Cerrar Sesión</button>
+
+    <footer>
+        &copy; 2025 NurseCare. Oliver Garcia González.
+    </footer>
+
+    <script>
+
+        async function desenroll() {
+            try {
+                const response = await fetch('/desenroll');
+                const data = await response.json();
+                if (data.status === 'logged_out') {
+                    window.location.href = '/enroll'; // Redirige al login
+                }
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+            }
+        }
+
+        window.onload = function() {
+            // Verificar si hay usuario autenticado
+            const authenticated = sessionStorage.getItem('authenticated');
+            if (!authenticated) {
+                window.location.href = '/enroll';
+                return;
+            }
+
+            const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+            
+            // Mostrar/ocultar botones según el rol
+            const adminButtons = document.querySelectorAll('.action-button:not([data-access="all"])');
+            adminButtons.forEach(btn => {
+                btn.style.display = isAdmin ? 'block' : 'none';
+            });
+
+            // Mostrar botón de historial solo para administradores
+            const emailBtn = document.getElementById('emailBtn');
+            emailBtn.style.display = isAdmin ? 'block' : 'none';
+        }
+
+        function handleButtonClick(action) {
+            switch(action) {
+                case 'simulate':
+                    window.location.href = "/camas";
+                    break;
+                case 'employees':
+                    window.location.href = "/asistentes";
+                    break;
+                case 'attendance':
+                    window.location.href = "/asistencias";
+                    break;
+                case 'create_rooms':
+                    window.location.href = "/habitacion";
+                    break;
+                case 'create_beds':
+                    window.location.href = "/nuevacama";
+                    break;
+                default:
+                    console.log("Acción no definida");
+            }
+        }
+        
+        document.getElementById('emailBtn').addEventListener('click', function() {
+            document.getElementById('modalOverlay').style.display = 'block';
+            document.getElementById('emailModal').style.display = 'block';
+        });
+
+        function closeEmailModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('emailModal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic
+        document.getElementById('modalOverlay').addEventListener('click', closeEmailModal);
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function submitEmail() {
+            const email = document.getElementById('emailInput').value;
+            if (validateEmail(email)) {
+                fetch(`/export/${email}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('El histórico ha sido enviado a su correo electrónico');
+                        } else {
+                            alert('Error al enviar el correo');
+                        }
+                        closeEmailModal();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al procesar la solicitud');
+                        closeEmailModal();
+                    });
+            } else {
+                alert('Por favor, ingrese un correo electrónico válido');
+            }
+        }
+
+    </script>
+</body>
+</html>

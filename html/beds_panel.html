@@ -1,0 +1,148 @@
+
+<!-- FRONTEND PARA MOSTRAR TODAS LAS CAMAS Y HABITACIONES -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Camas</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .room-container {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .room-title {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .beds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 10px 0;
+        }
+        .bed-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .bed-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .bed-button:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px auto;
+            max-width: 80%;
+            text-align: center;
+        }
+        
+        .error-message p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #999;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .back-button {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #7f8c8d;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Sistema de Control de Camas</h1>
+    </div>
+
+    <div class="container">
+        {% if error_message %}
+            <div class="error-message">
+                <p>{{ error_message }}</p>
+            </div>
+        {% else %}
+            {% for room in rooms %}
+            <div class="room-container">
+                <h2 class="room-title">Habitación {{ room.room_number }}</h2>
+                <div class="beds-grid">
+                    {% for bed in room.beds %}
+                    <button class="bed-button" onclick="handleBedClick('{{ bed.id_bed }}', '{{ room.room_number }}', '{{ bed.bed_letter }}')">
+                        {{ bed.display_name }}
+                    </button>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <button class="back-button" onclick="window.location.href='/panel'">
+        Volver al Panel
+    </button>
+    
+    <footer>
+        &copy; 2025 NurseCare. Oliver Garcia González.
+    </footer>
+
+    
+
+    <script>
+        function handleBedClick(bedId, roomNumber, bedLetter) {
+            window.location.href = `/pulsador/${roomNumber}/${bedLetter}`;
+        }
+    </script>
+</body>
+</html>
