@@ -6,7 +6,7 @@ Sistema web para gestionar llamadas de asistencia entre pacientes y personal de 
 ## Tecnologías Utilizadas
 
 ### Backend
-- Python 3.x
+- Python 3.12
 - FastAPI (Framework web)
 - SQLAlchemy (ORM)
 - MySQL (Base de datos)
@@ -99,3 +99,4 @@ uvicorn main:app --reload
 
 ## Autor
 Oliver Garcia González
+@oliverg09
