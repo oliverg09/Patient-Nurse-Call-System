@@ -1,7 +1,12 @@
 import requests
 
-PUSHOVER_USER_KEY = 'umpfi2md1a6b91zk7pxu5wy2mb3bce'
-PUSHOVER_API_TOKEN = 'aentxughcvabrvag556gcbpzejquyc'
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+PUSHOVER_USER_KEY = os.getenv("PUSHOVER_USER_KEY")
+PUSHOVER_API_TOKEN = os.getenv("PUSHOVER_API_TOKEN")
 
 def send_pushover_message(title, message, url=None):
     """Enviar mensaje al pushover"""
